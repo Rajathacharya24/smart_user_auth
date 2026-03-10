@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Smart User Auth (Java Backend)
 
 Phase-wise build for secure authentication using Java + Spring Boot.
@@ -117,3 +118,6 @@ Import the collection from:
 Copy `.env.example` to `.env` and adjust values as needed.
 
 Default profile: `dev`
+=======
+# smart_user_auth
+>>>>>>> 42f9d61d551c6b758d6e5720997499d087798a02
