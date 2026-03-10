@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAuth - Secure Authentication</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="ri-shield-keyhole-fill"></i></div>
+                SmartAuth
+            </a>
+            <div class="nav-links">
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="register.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+
+        <main class="center-flex">
+            <div class="hero">
+                <h1>Secure, Fast, & Reliable Authentication</h1>
+                <p>Welcome to SmartAuth. A robust JWT-based authentication system ensuring your data stays protected with modern security standards.</p>
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 40px;">
+                    <a href="register.html" class="btn btn-primary" style="padding: 16px 36px; font-size: 18px;">
+                        Get Started <i class="ri-arrow-right-line"></i>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="btn btn-outline" style="padding: 16px 36px; font-size: 18px;">
+                        View Source <i class="ri-github-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Redirect to dashboard if already logged in
+        if (api.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

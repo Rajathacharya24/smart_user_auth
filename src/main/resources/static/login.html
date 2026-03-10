@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SmartAuth</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar" style="border: none;">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="ri-shield-keyhole-fill"></i></div>
+                SmartAuth
+            </a>
+        </nav>
+        <main class="center-flex">
+            <div class="auth-card glass-panel">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Enter your credentials to access your account</p>
+                </div>
+
+                <div id="errorAlert" class="alert alert-error"></div>
+                <div id="successAlert" class="alert alert-success"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+                        <span class="loader"></span>
+                        <span class="btn-text">Sign In <i class="ri-login-box-line"></i></span>
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="register.html">Sign up</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        if (api.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+            errorAlert.style.display = 'none';
+            successAlert.style.display = 'none';
+
+            try {
+                await api.login(email, password);
+                successAlert.textContent = 'Login successful! Redirecting...';
+                successAlert.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (err) {
+                errorAlert.textContent = err.message || 'Login failed. Please check your credentials.';
+                errorAlert.style.display = 'block';
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

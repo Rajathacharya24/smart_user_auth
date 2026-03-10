@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16
+    container_name: smart_user_auth_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: smart_user_auth
+      POSTGRES_USER: smart_user
+      POSTGRES_PASSWORD: smart_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smart_user -d smart_user_auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

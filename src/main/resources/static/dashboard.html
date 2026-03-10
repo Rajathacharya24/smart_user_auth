@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SmartAuth</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="ri-shield-keyhole-fill"></i></div>
+                SmartAuth
+            </a>
+            <div class="nav-links">
+                <button id="logoutBtn" class="btn btn-outline" style="padding: 8px 16px;">
+                    Logout <i class="ri-logout-box-r-line"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="dashboard-container center-flex">
+            <div class="auth-card glass-panel" style="max-width: 600px;">
+                <div class="dashboard-header" style="flex-direction: column; text-align: center; gap: 20px;">
+                    <div id="loaderData" style="display: flex; justify-content: center;">
+                        <span class="loader"
+                            style="width: 40px; height: 40px; border-width: 4px; display: block; border-top-color: var(--primary-color);"></span>
+                    </div>
+                </div>
+
+                <div id="profileContent" style="display: none;">
+                    <div class="profile-card glass-panel">
+                        <div class="avatar" id="userAvatar">A</div>
+                        <div class="profile-info">
+                            <h2 id="userName">Loading...</h2>
+                            <p><i class="ri-mail-line"></i> <span id="userEmail">loading@example.com</span></p>
+                            <p
+                                style="margin-top: 10px; font-size: 14px; display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.5);">
+                                <i class="ri-verified-badge-fill"></i> Active Session
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-top: 30px; background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <h3 style="margin-bottom: 15px; font-size: 18px; color: var(--text-primary);"><i
+                                class="ri-shield-check-line" style="color: var(--primary-color);"></i> Account Security
+                        </h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">Your account is
+                            secured with standard JWT tokens. You can securely test API endpoints directly from this
+                            authenticated state.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check if authenticated
+        if (!api.isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+
+        // Fetch user data
+        async function loadProfile() {
+            try {
+                const user = await api.getCurrentUser();
+
+                document.getElementById('userName').textContent = user.name || 'User';
+                document.getElementById('userEmail').textContent = user.email || 'No email';
+                document.getElementById('userAvatar').textContent = (user.name ? user.name.charAt(0).toUpperCase() : 'U');
+
+                document.getElementById('loaderData').style.display = 'none';
+                document.getElementById('profileContent').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load profile', error);
+                alert("Session expired or invalid. Please login again.");
+                api.clearTokens();
+                window.location.href = 'login.html';
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('logoutBtn');
+            btn.innerHTML = '<span class="loader" style="display:inline-block;width:15px;height:15px;"></span> Logging out...';
+            btn.disabled = true;
+
+            try {
+                await api.logout();
+            } catch (e) { }
+
+            // Redirect anyway
+            window.location.href = 'login.html';
+        });
+
+        // Initialize
+        loadProfile();
+    </script>
+</body>
+
+</html>
